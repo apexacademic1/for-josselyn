@@ -4,585 +4,778 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Josselyn 💗</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
 <style>
+:root {
+  --cream: #fdf6ee;
+  --parchment: #f5e6d0;
+  --rose: #c8556a;
+  --rose-light: #e8a0aa;
+  --navy: #1e2d4a;
+  --ink: #2a1f1a;
+  --gold: #c9a96e;
+  --sage: #7a9e7e;
+}
+
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  font-family: 'Lato', sans-serif;
-  background: #1a1a2e;
+  font-family: 'Cormorant Garamond', serif;
+  background: var(--navy);
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   position: relative;
-  cursor: pointer;
-  transition: background 1s ease;
 }
 
-canvas { position:fixed; inset:0; pointer-events:none; z-index:0; }
+/* ── background stars ── */
+.bg-stars {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+}
+.bg-star {
+  position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,0.6);
+  animation: twinkle ease-in-out infinite;
+}
+@keyframes twinkle { 0%,100%{opacity:0.15} 50%{opacity:0.8} }
 
-.stage {
-  position: relative;
-  z-index: 10;
-  width: 92%;
-  max-width: 520px;
-}
+/* ══════════════════════════════
+   SCENE MANAGER
+══════════════════════════════ */
+.scene { position: relative; z-index: 10; }
+.scene.hidden { display: none !important; }
 
-.slide {
-  display: none;
-  border-radius: 32px;
-  padding: 3.2rem 3.2rem 2.8rem;
-  text-align: center;
-  position: relative;
-  animation: riseIn 0.8s cubic-bezier(0.22,1,0.36,1) both;
-}
-.slide.active { display: block; }
-
-@keyframes riseIn {
-  from { opacity:0; transform:translateY(36px) scale(0.94); }
-  to   { opacity:1; transform:translateY(0) scale(1); }
-}
-
-/* slide themes */
-.slide-dark {
-  background: #12122a;
-  box-shadow: 0 30px 80px rgba(0,0,50,0.5), inset 0 0 0 1px rgba(100,120,200,0.2);
-  color: #e0e8ff;
-}
-.slide-light {
-  background: white;
-  box-shadow: 0 30px 80px rgba(210,80,120,0.18), 0 8px 24px rgba(0,0,0,0.06),
-              inset 0 0 0 1.5px rgba(240,160,190,0.4);
-}
-.slide-navy {
-  background: #0d1b3e;
-  box-shadow: 0 30px 80px rgba(0,20,80,0.6), inset 0 0 0 1px rgba(80,120,220,0.25);
-}
-.slide-cream {
-  background: #fdf8f0;
-  box-shadow: 0 30px 80px rgba(180,140,80,0.15), inset 0 0 0 1.5px rgba(200,170,120,0.3);
-}
-.slide-bird {
-  background: #e8f4f0;
-  box-shadow: 0 30px 80px rgba(40,120,80,0.15), inset 0 0 0 1.5px rgba(100,180,140,0.4);
-}
-.slide-pink {
-  background: white;
-  box-shadow: 0 30px 80px rgba(210,80,120,0.2), inset 0 0 0 1.5px rgba(240,160,190,0.5);
-}
-
-/* dots */
-.dots {
+/* ══════════════════════════════
+   SCENE 1 — ENVELOPE
+══════════════════════════════ */
+#scene-envelope {
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-top: 1.5rem;
+  flex-direction: column;
+  gap: 1.4rem;
 }
-.dot {
-  width: 7px; height: 7px;
+
+.envelope-wrap {
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.envelope {
+  width: 340px;
+  position: relative;
+  filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5));
+  transition: transform 0.3s ease;
+}
+.envelope-wrap:hover .envelope { transform: translateY(-6px) scale(1.02); }
+
+/* envelope body */
+.env-body {
+  width: 340px;
+  height: 220px;
+  background: linear-gradient(160deg, var(--parchment) 0%, var(--cream) 100%);
+  border-radius: 4px 4px 12px 12px;
+  position: relative;
+  overflow: hidden;
+}
+.env-body::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 110px;
+  background: linear-gradient(to top, rgba(200,180,150,0.25), transparent);
+}
+/* inner letter peek */
+.env-inner {
+  position: absolute;
+  top: 18px; left: 20px; right: 20px; bottom: 0;
+  background: linear-gradient(180deg, #fff9f2 0%, #fdf3e8 100%);
+  border-radius: 2px;
+  opacity: 0.6;
+}
+
+/* bottom flap triangles */
+.env-bottom-left {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 0;
+  border-left: 170px solid #e8d5be;
+  border-top: 110px solid transparent;
+}
+.env-bottom-right {
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 0; height: 0;
+  border-right: 170px solid #dcc8b0;
+  border-top: 110px solid transparent;
+}
+
+/* top flap */
+.env-flap {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 0;
+  border-left: 170px solid transparent;
+  border-right: 170px solid transparent;
+  border-top: 120px solid #e0ccb4;
+  transform-origin: top center;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 5;
+}
+.envelope.opening .env-flap {
+  transform: rotateX(-180deg);
+}
+
+/* wax seal */
+.seal {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px; height: 52px;
+  background: radial-gradient(circle at 35% 35%, #e87070, var(--rose) 60%, #a03040);
   border-radius: 50%;
-  background: rgba(255,255,255,0.25);
-  transition: all 0.3s;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+  z-index: 6;
+  transition: opacity 0.3s, transform 0.3s;
 }
-.dot.active { background: #d04070; transform: scale(1.3); }
-.dot.light-dot { background: rgba(180,100,130,0.3); }
-.dot.light-dot.active { background: #d04070; }
+.envelope.opening .seal { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
 
-.tap-hint {
-  margin-top: 1rem;
-  font-size: 0.7rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
-  animation: pulse 2s ease-in-out infinite;
-}
-.tap-hint.dark-hint { color: rgba(180,120,150,0.6); }
-
-@keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
-
-/* ── SLIDE 1: Stars / opening ── */
-.stars-header {
+.env-hint {
   font-family: 'Lato', sans-serif;
   font-weight: 300;
   font-size: 0.72rem;
-  letter-spacing: 0.4em;
+  letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: rgba(180,190,255,0.6);
-  margin-bottom: 2rem;
+  color: rgba(255,255,255,0.35);
+  animation: breathe 2.5s ease-in-out infinite;
+  text-align: center;
 }
-.name-display {
-  font-family: 'Playfair Display', serif;
-  font-size: 3.4rem;
-  font-weight: 700;
-  color: #ffffff;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  margin-bottom: 0.3rem;
-  text-shadow: 0 0 40px rgba(150,160,255,0.4);
+@keyframes breathe { 0%,100%{opacity:0.3} 50%{opacity:0.8} }
+
+/* ══════════════════════════════
+   SCENE 2 — LETTER
+══════════════════════════════ */
+#scene-letter {
+  display: none;
+  align-items: center;
+  justify-content: center;
 }
-.name-last {
-  font-family: 'Playfair Display', serif;
+
+.letter-paper {
+  width: 360px;
+  max-height: 90vh;
+  background: linear-gradient(180deg, #fffdf8 0%, #fdf6ec 100%);
+  border-radius: 2px 2px 8px 8px;
+  padding: 3rem 2.8rem 2.5rem;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.45), 0 2px 0 rgba(200,170,130,0.4) inset;
+  position: relative;
+  overflow-y: auto;
+  animation: letterRise 0.8s cubic-bezier(0.22,1,0.36,1) both;
+  scrollbar-width: none;
+}
+.letter-paper::-webkit-scrollbar { display: none; }
+
+@keyframes letterRise {
+  from { opacity:0; transform: translateY(60px) scale(0.95); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+
+/* ruled lines */
+.letter-paper::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0px,
+    transparent 31px,
+    rgba(180,160,130,0.12) 31px,
+    rgba(180,160,130,0.12) 32px
+  );
+  background-position: 0 88px;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.letter-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 1.8rem;
+}
+
+.letter-salutation {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--rose);
+  margin-bottom: 1.2rem;
+}
+
+.letter-body {
+  font-family: 'EB Garamond', serif;
+  font-size: 1.05rem;
+  color: var(--ink);
+  line-height: 2;
+  margin-bottom: 1.4rem;
+}
+.letter-body em { font-style: italic; color: var(--rose); }
+
+.letter-divider {
+  text-align: center;
+  color: var(--gold);
+  font-size: 1rem;
+  letter-spacing: 0.4em;
+  margin: 1.6rem 0;
+  opacity: 0.6;
+}
+
+/* question section */
+.question-block {
+  text-align: center;
+  margin-top: 1.8rem;
+}
+.question-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.35rem;
+  color: var(--ink);
+  line-height: 1.5;
+  margin-bottom: 1.8rem;
+}
+.question-text strong { color: var(--rose); font-style: normal; font-weight: 600; }
+
+.btn-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  position: relative;
+}
+
+.btn-yes, .btn-no {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  padding: 12px 36px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-yes {
+  background: linear-gradient(135deg, var(--rose), #e07080);
+  color: white;
+  box-shadow: 0 6px 20px rgba(200,80,100,0.35);
+}
+.btn-yes:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 28px rgba(200,80,100,0.45); }
+
+.btn-no {
+  background: transparent;
+  color: #999;
+  border: 1.5px solid #ddd;
+}
+.btn-no:hover { background: #f5f5f5; }
+.btn-no.fleeing {
+  animation: flee 0.5s cubic-bezier(0.4,0,1,1) forwards;
+}
+@keyframes flee {
+  0%   { transform: translate(0,0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(300px, -200px) rotate(45deg) scale(0); opacity: 0; }
+}
+
+.letter-sig {
+  font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   font-size: 1.15rem;
-  color: rgba(180,190,255,0.7);
-  letter-spacing: 0.15em;
-  margin-bottom: 2rem;
+  color: var(--ink);
+  margin-top: 1.8rem;
+  line-height: 1.7;
 }
-.star-divider {
-  display:flex; align-items:center; gap:12px;
-  margin: 0 auto 1.8rem;
-  width: 60%;
+.letter-sig-name {
+  font-size: 1.5rem;
+  color: var(--rose);
+  font-weight: 600;
 }
-.star-divider::before,.star-divider::after {
-  content:''; flex:1; height:1px;
-  background: linear-gradient(to right, transparent, rgba(180,190,255,0.4), transparent);
-}
-.star-divider span { font-size:0.85rem; opacity:0.7; }
-.open-text {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
-  color: rgba(220,225,255,0.8);
-  line-height: 1.8;
-}
-.open-text em { color: #b8c0ff; font-style: italic; }
 
-/* star field */
-.starfield {
-  position: absolute;
-  inset: 0;
-  border-radius: 32px;
-  overflow: hidden;
-  pointer-events: none;
+/* ══════════════════════════════
+   SCENE 3 — CALENDAR
+══════════════════════════════ */
+#scene-calendar {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.8rem;
 }
-.star-dot {
-  position: absolute;
-  border-radius: 50%;
+
+.cal-wrap {
   background: white;
-  animation: twinkle ease-in-out infinite;
-}
-@keyframes twinkle {
-  0%,100%{opacity:0.2} 50%{opacity:1}
+  border-radius: 20px;
+  width: 340px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+  overflow: hidden;
+  animation: letterRise 0.7s cubic-bezier(0.22,1,0.36,1) both;
 }
 
-/* ── SLIDE 2: San Francisco memory ── */
-.sf-emoji { font-size:3.5rem; display:block; margin-bottom:1rem; }
-.mem-label {
+.cal-header {
+  background: linear-gradient(135deg, var(--rose), #e07080);
+  padding: 1.4rem 1.6rem 1rem;
+  text-align: center;
+  color: white;
+}
+.cal-year {
   font-family: 'Lato', sans-serif;
   font-weight: 300;
   font-size: 0.75rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: rgba(180,190,255,0.5);
-  margin-bottom: 0.5rem;
+  opacity: 0.7;
+  margin-bottom: 0.2rem;
 }
-.mem-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 1.4rem;
-  line-height: 1.2;
-}
-.mem-body {
-  font-family: 'Playfair Display', serif;
-  font-size: 1rem;
-  color: rgba(210,218,255,0.85);
-  line-height: 1.9;
-}
-.mem-body em { color: #c8d0ff; font-style:italic; }
-
-/* ── SLIDE 3: BIRD ── */
-.bird-scene {
-  position: relative;
-  height: 160px;
-  margin: 0.5rem 0 1.2rem;
-  overflow: hidden;
-  border-radius: 16px;
-  background: rgba(180,220,200,0.3);
-}
-.flying-bird {
-  position: absolute;
-  font-size: 2.4rem;
-  animation: birdFly linear infinite;
-  top: 35px;
-}
-.flying-bird:nth-child(2) { font-size:1.8rem; top:90px; animation-duration:5.5s; animation-delay:1.5s; }
-.flying-bird:nth-child(3) { font-size:1.4rem; top:55px; animation-duration:7s; animation-delay:3s; }
-@keyframes birdFly {
-  from { left:-70px; }
-  to   { left:calc(100% + 30px); }
-}
-.bird-headline {
-  font-family: 'Playfair Display', serif;
+.cal-month {
+  font-family: 'Cormorant Garamond', serif;
   font-size: 2.2rem;
-  font-weight: 700;
-  color: #2a6040;
-  margin-bottom: 0.3rem;
-  animation: wobble 1.2s ease-in-out infinite;
+  font-weight: 600;
+  letter-spacing: 0.05em;
 }
-@keyframes wobble { 0%,100%{transform:rotate(-1.5deg)} 50%{transform:rotate(1.5deg)} }
-.bird-sub {
+
+.cal-days-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: #fdf0f3;
+  padding: 0.5rem 1rem 0.3rem;
+}
+.cal-days-header span {
+  text-align: center;
   font-family: 'Lato', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rose);
+  font-weight: 700;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  padding: 0.8rem 1rem 1.2rem;
+  background: white;
+}
+
+.cal-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: #444;
+  border-radius: 50%;
+  cursor: default;
+  transition: all 0.2s;
+  position: relative;
+}
+.cal-day.empty { }
+.cal-day.other-month { color: #ccc; }
+
+.cal-day.special {
+  background: linear-gradient(135deg, var(--rose), #e07080);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(200,80,100,0.4);
+  animation: specialPulse 2s ease-in-out infinite;
+  font-size: 1.05rem;
+}
+@keyframes specialPulse {
+  0%,100%{box-shadow:0 4px 14px rgba(200,80,100,0.4); transform:scale(1);}
+  50%{box-shadow:0 6px 22px rgba(200,80,100,0.6); transform:scale(1.12);}
+}
+
+.cal-note {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  animation: breathe 2s ease-in-out infinite;
+}
+
+/* ══════════════════════════════
+   SCENE 4 — BIRD TRANSITION
+══════════════════════════════ */
+#scene-bird {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.bird-morph-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  height: 300px;
+  position: relative;
+}
+
+.morph-emoji {
+  font-size: 8rem;
+  position: absolute;
+  transition: all 1s cubic-bezier(0.4,0,0.2,1);
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.3));
+}
+.morph-emoji.bird-emoji {
+  animation: birdFloat 1.5s ease-in-out infinite;
+}
+@keyframes birdFloat {
+  0%,100%{transform:translateY(0) rotate(-5deg);}
+  50%{transform:translateY(-18px) rotate(5deg);}
+}
+.morph-emoji.hide {
+  opacity: 0;
+  transform: scale(0.2) rotate(180deg) !important;
+}
+.morph-emoji.book-emoji {
+  opacity: 0;
+  transform: scale(0.2) rotate(-180deg);
+}
+.morph-emoji.show {
+  opacity: 1;
+  transform: scale(1) rotate(0deg) !important;
+  animation: bookBounce 0.6s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes bookBounce {
+  from{transform:scale(0.3) rotate(-20deg);}
+  to{transform:scale(1) rotate(0deg);}
+}
+
+/* ══════════════════════════════
+   SCENE 5 — BOOK
+══════════════════════════════ */
+#scene-book {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-cover {
+  width: 300px;
+  background: linear-gradient(160deg, #1e2d4a 0%, #2a4060 50%, #1a2840 100%);
+  border-radius: 4px 16px 16px 4px;
+  padding: 3.5rem 2.5rem;
+  text-align: center;
+  box-shadow:
+    -6px 0 0 #0d1824,
+    -10px 4px 20px rgba(0,0,0,0.5),
+    0 24px 80px rgba(0,0,0,0.6),
+    inset 4px 0 12px rgba(255,255,255,0.04);
+  position: relative;
+  animation: bookOpen 1s cubic-bezier(0.22,1,0.36,1) both;
+  overflow: hidden;
+}
+
+@keyframes bookOpen {
+  from { opacity:0; transform: rotateY(-40deg) scale(0.9); }
+  to   { opacity:1; transform: rotateY(0deg) scale(1); }
+}
+
+/* book texture */
+.book-cover::before {
+  content:'';
+  position:absolute; inset:0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 3px,
+    rgba(255,255,255,0.015) 3px, rgba(255,255,255,0.015) 4px
+  );
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.book-spine-line {
+  position: absolute;
+  left: 22px; top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(255,255,255,0.06);
+}
+
+.book-stars {
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  color: rgba(201,169,110,0.5);
+  margin-bottom: 2rem;
+}
+
+.book-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 300;
+  color: white;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.6rem;
+}
+.book-title em {
+  font-style: italic;
+  color: var(--rose-light);
+}
+
+.book-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
   font-size: 0.9rem;
-  color: #4a8060;
-  letter-spacing: 0.08em;
-  margin-bottom: 1.2rem;
-}
-.bird-body {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.95rem;
-  color: #3a6050;
-  line-height: 1.85;
-}
-.bird-body em { font-style:italic; color:#2a7050; }
-.bird-footnote {
-  font-family:'Lato',sans-serif;
-  font-size:0.7rem;
-  letter-spacing:0.18em;
-  text-transform:uppercase;
-  color:#7aaa90;
-  margin-top:1.2rem;
-  animation: pulse 1.5s ease-in-out infinite;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.12em;
+  margin-bottom: 2.5rem;
 }
 
-/* ── SLIDE 4: The things I love ── */
-.love-label {
-  font-family:'Lato',sans-serif;
-  font-weight:300;
-  font-size:0.75rem;
-  letter-spacing:0.3em;
-  text-transform:uppercase;
-  color:#c889a8;
-  margin-bottom:0.5rem;
-}
-.love-title {
-  font-family:'Playfair Display',serif;
-  font-size:1.9rem;
-  font-weight:700;
-  color:#d04070;
-  margin-bottom:1.4rem;
-  line-height:1.2;
-}
-.love-list { list-style:none; text-align:left; }
-.love-list li {
-  font-family:'Playfair Display',serif;
-  font-size:0.93rem;
-  color:#6a3050;
-  padding:9px 0;
-  border-bottom:1px solid #f5d0e0;
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  line-height:1.5;
-}
-.love-list li:last-child { border-bottom:none; }
-.love-list .icon { font-size:1.1rem; min-width:22px; margin-top:1px; }
-.love-list em { font-style:italic; color:#d04070; }
-
-/* ── SLIDE 5: Final ── */
-.final-top {
-  font-family:'Lato',sans-serif;
-  font-weight:300;
-  font-size:0.75rem;
-  letter-spacing:0.35em;
-  text-transform:uppercase;
-  color:#c889a8;
-  margin-bottom:1rem;
-}
-.final-heart {
-  font-size:5.5rem;
-  display:block;
-  margin-bottom:0.8rem;
-  animation: hb 1.8s ease-in-out infinite;
-  filter: drop-shadow(0 6px 24px rgba(230,80,120,0.4));
-}
-@keyframes hb {
-  0%,100%{transform:scale(1)} 15%{transform:scale(1.28)} 30%{transform:scale(1)} 45%{transform:scale(1.14)} 60%{transform:scale(1)}
-}
-.final-name {
-  font-family:'Playfair Display',serif;
-  font-size:2.6rem;
-  font-weight:700;
-  color:#d04070;
-  line-height:1;
-  margin-bottom:0.2rem;
-}
-.final-sub {
-  font-family:'Playfair Display',serif;
-  font-style:italic;
-  font-size:1.05rem;
-  color:#c080a0;
-  letter-spacing:0.1em;
-  margin-bottom:1.4rem;
-}
-.final-divider {
-  display:flex;align-items:center;gap:12px;
-  margin:0 auto 1.4rem; width:65%;
-}
-.final-divider::before,.final-divider::after {
-  content:'';flex:1;height:1px;
-  background:linear-gradient(to right,transparent,#f0b0cc,transparent);
-}
-.final-body {
-  font-family:'Playfair Display',serif;
-  font-size:1rem;
-  color:#8a4060;
-  line-height:1.9;
-  margin-bottom:1.6rem;
-}
-.final-body em { color:#d04070; font-style:italic; }
-.traits {
-  display:flex;justify-content:center;gap:7px;flex-wrap:wrap;
-  margin-bottom:1.6rem;
-}
-.trait {
-  background:#fff0f6;
-  border:1.5px solid #f5c0d8;
-  border-radius:50px;
-  padding:5px 14px;
-  font-size:0.72rem;
-  font-family:'Lato',sans-serif;
-  letter-spacing:0.08em;
-  text-transform:uppercase;
-  color:#c06888;
-}
-.sig {
-  font-family:'Playfair Display',serif;
-  font-style:italic;
-  font-size:1.5rem;
-  color:#d04070;
-  margin-bottom:0.4rem;
-}
-.xoxo {
-  font-family:'Lato',sans-serif;
-  font-weight:300;
-  font-size:0.72rem;
-  letter-spacing:0.45em;
-  text-transform:uppercase;
-  color:#c0a0b0;
+.book-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  margin: 0 auto 2.5rem;
 }
 
-.corner-deco {
-  position:absolute;font-size:1.3rem;opacity:0.15;
+.book-author {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.4rem;
 }
-.tl{top:16px;left:20px;transform:rotate(-20deg)}
-.tr{top:16px;right:20px;transform:rotate(20deg)}
-.bl{bottom:16px;left:20px;transform:rotate(20deg)}
-.br{bottom:16px;right:20px;transform:rotate(-20deg)}
+
+.book-xoxo {
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  font-size: 0.68rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+}
+
+.book-hearts {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.3em;
+  color: rgba(200,100,120,0.4);
+  animation: breathe 2.5s ease-in-out infinite;
+}
 </style>
 </head>
 <body>
 
-<canvas id="c"></canvas>
+<!-- bg stars -->
+<div class="bg-stars" id="bgStars"></div>
 
-<div class="stage">
-
-  <!-- SLIDE 1: Starry night opening -->
-  <div class="slide slide-dark active" id="slide1">
-    <div class="starfield" id="starfield"></div>
-    <div class="stars-header">born in vina, california · raised everywhere · landed perfectly</div>
-    <div class="name-display">Josselyn</div>
-    <div class="name-last">Trombly</div>
-    <div class="star-divider"><span>✦</span></div>
-    <p class="open-text">
-      I made this for you.<br>
-      Every word is true.<br>
-      <em>Tap to begin.</em>
-    </p>
-  </div>
-
-  <!-- SLIDE 2: San Francisco -->
-  <div class="slide slide-navy" id="slide2">
-    <span class="sf-emoji">🌉</span>
-    <div class="mem-label">if we could relive one day</div>
-    <div class="mem-title">San Francisco.<br>You said it too.</div>
-    <p class="mem-body">
-      Out of every moment we've had,<br>
-      <em>that's</em> the one.<br><br>
-      I think about it more than you know —<br>
-      the two of us in that city,<br>
-      and how right everything felt.<br><br>
-      I want a thousand more days like it.
-    </p>
-  </div>
-
-  <!-- SLIDE 3: THE BIRD -->
-  <div class="slide slide-bird" id="slide3">
-    <div class="bird-scene">
-      <div class="flying-bird" style="animation-duration:4s">🐦</div>
-      <div class="flying-bird">🐦</div>
-      <div class="flying-bird">🦅</div>
+<!-- ══ SCENE 1: ENVELOPE ══ -->
+<div class="scene" id="scene-envelope">
+  <div class="envelope-wrap" onclick="openEnvelope()">
+    <div class="envelope" id="envelope">
+      <div class="env-body">
+        <div class="env-inner"></div>
+        <div class="env-bottom-left"></div>
+        <div class="env-bottom-right"></div>
+      </div>
+      <div class="env-flap"></div>
+      <div class="seal">💗</div>
     </div>
-    <div class="bird-headline">LOOK. A BIRD.</div>
-    <div class="bird-sub">there's a bird. right there. do you see it.</div>
-    <div style="height:1px;background:rgba(100,180,140,0.3);margin:1rem 0"></div>
-    <p class="bird-body">
-      you know what's funny?<br>
-      when someone asked you what animal I'd be —<br>
-      you said <em>a bird.</em><br><br>
-      free. always moving. kind of chaotic.<br>
-      yeah. that tracks.
-    </p>
-    <div class="bird-footnote">okay. keep going. →</div>
   </div>
+  <div class="env-hint">tap to open</div>
+</div>
 
-  <!-- SLIDE 4: Things I love about you -->
-  <div class="slide slide-light" id="slide4">
-    <div class="corner-deco tl">🌸</div>
-    <div class="corner-deco tr">💗</div>
-    <div class="love-label">things I love about you</div>
-    <div class="love-title">specifically.<br>concretely. you.</div>
-    <ul class="love-list">
-      <li><span class="icon">📚</span> You're studying biochemistry to get to the stars. That's the most <em>you</em> thing possible.</li>
-      <li><span class="icon">🌸</span> You worked with preschoolers by day and read fiction at night. You contain multitudes.</li>
-      <li><span class="icon">🩰</span> Seven years of ballet. You carry grace even when you think nobody's watching.</li>
-      <li><span class="icon">🌙</span> You want to be remembered after you're gone. You <em>will</em> be. I'm already sure of it.</li>
-      <li><span class="icon">☕</span> Our morning routines. Waking up together. You said it's when you feel most connected to me — me too.</li>
-      <li><span class="icon">💌</span> You let me carry your bag even when you pretend not to like it. I see you.</li>
-      <li><span class="icon">🌺</span> Peonies and calla lilies. Navy blue. Pastries you won't share. I know you.</li>
-    </ul>
-  </div>
+<!-- ══ SCENE 2: LETTER ══ -->
+<div class="scene hidden" id="scene-letter" style="display:none">
+  <div class="letter-paper">
+    <div class="letter-date">March 22, 2025</div>
+    <div class="letter-salutation">My Josselyn,</div>
 
-  <!-- SLIDE 5: Final -->
-  <div class="slide slide-pink" id="slide5">
-    <div class="corner-deco tl">✨</div>
-    <div class="corner-deco tr">🌷</div>
-    <div class="corner-deco bl">🌸</div>
-    <div class="corner-deco br">✨</div>
-    <div class="final-top">and most importantly</div>
-    <span class="final-heart">💗</span>
-    <div class="final-name">I love you,</div>
-    <div class="final-sub">Josselyn Trombly</div>
-    <div class="final-divider"><span>✦</span></div>
-    <p class="final-body">
-      Long distance is hard.<br>
-      But you're worth every mile.<br><br>
-      I'm not going anywhere —<br>
-      and someday we'll have <em>every morning</em> together.<br><br>
-      Until then, I'll be here.<br>
-      <em>Always.</em>
+    <p class="letter-body">
+      I've been thinking about how to say this for a while now —
+      and I think the only honest way is to just say it plainly:<br><br>
+      <em>You are the best part of my days.</em><br><br>
+      The mornings we wake up together, the way you carry yourself,
+      the way you laugh when you're really laughing —
+      all of it. I notice all of it.<br><br>
+      You are brilliant in ways that take my breath away.
+      You want to study the stars. You danced ballet for seven years.
+      You read books that change the way you see the world,
+      and then you share that with me.<br><br>
+      <em>I get to be loved by you.</em> That's not something I take lightly.
     </p>
-    <div class="traits">
-      <div class="trait">🌸 Kind</div>
-      <div class="trait">🔭 Future astrobiologist</div>
-      <div class="trait">🐦 Bird-spotter</div>
-      <div class="trait">📚 Bookworm</div>
-      <div class="trait">💙 Navy blue</div>
-      <div class="trait">🌺 My favorite</div>
+
+    <div class="letter-divider">✦ &nbsp; ✦ &nbsp; ✦</div>
+
+    <p class="letter-body">
+      This long distance thing is hard.
+      But every mile just reminds me that you're worth every single one.<br><br>
+      I don't know exactly what the future looks like —
+      but I know I want to figure it out <em>with you.</em><br><br>
+      So here's what I want to ask you, Josselyn —
+    </p>
+
+    <div class="question-block">
+      <div class="question-text">
+        Will you be mine,<br>
+        <strong>officially?</strong>
+      </div>
+      <div class="btn-row" id="btnRow">
+        <button class="btn-no" id="btnNo" onclick="noFlee()">No</button>
+        <button class="btn-yes" onclick="showCalendar()">Yes 💗</button>
+      </div>
     </div>
-    <div class="sig">With everything I have</div>
-    <div class="xoxo">x o x o</div>
-  </div>
 
-  <div class="dots" id="dots">
-    <div class="dot active"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
+    <div class="letter-sig">
+      Always yours,<br>
+      <span class="letter-sig-name">Isti</span>
+    </div>
   </div>
-  <div class="tap-hint" id="tapHint">tap anywhere to continue →</div>
+</div>
+
+<!-- ══ SCENE 3: CALENDAR ══ -->
+<div class="scene hidden" id="scene-calendar" style="display:none">
+  <div class="cal-wrap">
+    <div class="cal-header">
+      <div class="cal-year">2025</div>
+      <div class="cal-month">March</div>
+    </div>
+    <div class="cal-days-header">
+      <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+  </div>
+  <div class="cal-note">tap the special day ✦</div>
+</div>
+
+<!-- ══ SCENE 4: BIRD MORPH ══ -->
+<div class="scene hidden" id="scene-bird" style="display:none">
+  <div class="bird-morph-wrap">
+    <div class="morph-emoji bird-emoji" id="morphEmoji">🐦</div>
+    <div class="morph-emoji book-emoji" id="bookEmoji">📖</div>
+  </div>
+</div>
+
+<!-- ══ SCENE 5: BOOK ══ -->
+<div class="scene hidden" id="scene-book" style="display:none">
+  <div class="book-cover">
+    <div class="book-spine-line"></div>
+    <div class="book-stars">✦ &nbsp; ✦ &nbsp; ✦</div>
+    <div class="book-title">
+      <em>Our Story</em><br>Just Started
+    </div>
+    <div class="book-subtitle">a love story in progress</div>
+    <div class="book-divider"></div>
+    <div class="book-author">by Isti</div>
+    <div class="book-xoxo">xoxo</div>
+    <div class="book-hearts">💗 &nbsp; 💕 &nbsp; 💗</div>
+  </div>
 </div>
 
 <script>
-  const slides = document.querySelectorAll('.slide');
-  const dots = document.querySelectorAll('.dot');
-  const tapHint = document.getElementById('tapHint');
-  const body = document.body;
-  const bgs = ['#1a1a2e','#0d1520','#e8f4f0','#fff8fb','#fff8fb'];
+/* ── background stars ── */
+const bgStars = document.getElementById('bgStars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div');
+  s.className = 'bg-star';
+  const sz = Math.random() * 2.2 + 0.4;
+  s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${2+Math.random()*4}s;animation-delay:${Math.random()*4}s;`;
+  bgStars.appendChild(s);
+}
 
-  let current = 0;
+/* ── helpers ── */
+function show(id) {
+  const el = document.getElementById(id);
+  el.classList.remove('hidden');
+  el.style.display = 'flex';
+}
+function hide(id) {
+  const el = document.getElementById(id);
+  el.classList.add('hidden');
+  el.style.display = 'none';
+}
 
-  // build starfield for slide 1
-  const sf = document.getElementById('starfield');
-  for (let i = 0; i < 55; i++) {
-    const s = document.createElement('div');
-    s.className = 'star-dot';
-    const size = Math.random() * 2.5 + 0.5;
-    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${2+Math.random()*3}s;animation-delay:${Math.random()*3}s;`;
-    sf.appendChild(s);
+/* ── SCENE 1: open envelope ── */
+function openEnvelope() {
+  const env = document.getElementById('envelope');
+  env.classList.add('opening');
+  setTimeout(() => {
+    hide('scene-envelope');
+    show('scene-letter');
+  }, 900);
+}
+
+/* ── No button flees ── */
+function noFlee() {
+  const btn = document.getElementById('btnNo');
+  btn.classList.add('fleeing');
+  btn.addEventListener('animationend', () => btn.remove(), { once: true });
+}
+
+/* ── SCENE 3: calendar ── */
+function showCalendar() {
+  hide('scene-letter');
+  show('scene-calendar');
+  buildCalendar();
+}
+
+function buildCalendar() {
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+  // March 2025 starts on Saturday (day index 6)
+  const startDay = 6; // Saturday
+  const daysInMarch = 31;
+
+  // empty cells before March 1
+  for (let i = 0; i < startDay; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cal-day empty';
+    grid.appendChild(cell);
   }
 
-  document.body.addEventListener('click', () => {
-    if (current < slides.length - 1) {
-      slides[current].classList.remove('active');
-      current++;
-      slides[current].classList.add('active');
-      dots.forEach((d,i) => d.classList.toggle('active', i === current));
-      body.style.background = bgs[current];
-
-      // switch dot/hint color for light slides
-      if (current >= 3) {
-        dots.forEach(d => d.classList.add('light-dot'));
-        tapHint.classList.add('dark-hint');
-        tapHint.style.color = 'rgba(180,120,150,0.5)';
-      }
-      if (current === slides.length - 1) {
-        tapHint.style.opacity = '0';
-        tapHint.style.transition = 'opacity 0.6s';
-      }
+  for (let d = 1; d <= daysInMarch; d++) {
+    const cell = document.createElement('div');
+    cell.className = 'cal-day';
+    cell.textContent = d;
+    if (d === 22) {
+      cell.classList.add('special');
+      cell.title = 'Our day 💗';
+      cell.onclick = () => startBirdMorph();
     }
-  });
-
-  // floating particles canvas
-  const canvas = document.getElementById('c');
-  const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
-
-  function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
-
-  const SETS = [
-    ['⭐','✨','💫','🌟','⭐','✦'],
-    ['🌉','💙','✨','🌃','💫'],
-    ['🐦','🌿','🌱','🍃','🐦'],
-    ['💗','🌸','💕','🌷','💗'],
-    ['💗','🌸','✨','💕','🌺','💗'],
-  ];
-
-  function Particle() {
-    this.reset = function(set) {
-      const emojis = SETS[set || 0];
-      this.x = Math.random() * W;
-      this.y = H + 30;
-      this.size = 11 + Math.random() * 13;
-      this.speed = 0.4 + Math.random() * 0.7;
-      this.drift = (Math.random() - 0.5) * 0.35;
-      this.alpha = 0.25 + Math.random() * 0.35;
-      this.emoji = emojis[Math.floor(Math.random() * emojis.length)];
-      this.angle = 0;
-      this.spin = (Math.random() - 0.5) * 0.012;
-      this.set = set || 0;
-    };
-    this.reset(0);
-    this.y = Math.random() * H;
+    grid.appendChild(cell);
   }
+}
 
-  function init() {
-    resize();
-    particles = Array.from({length:25}, () => new Particle());
-    loop();
-  }
+/* ── SCENE 4 → 5: bird morphs into book ── */
+function startBirdMorph() {
+  hide('scene-calendar');
+  show('scene-bird');
 
-  function loop() {
-    ctx.clearRect(0, 0, W, H);
-    for (const p of particles) {
-      p.y -= p.speed; p.x += p.drift; p.angle += p.spin;
-      if (p.y < -40) p.reset(current);
-      ctx.save();
-      ctx.globalAlpha = p.alpha;
-      ctx.font = p.size + 'px serif';
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.angle);
-      ctx.fillText(p.emoji, -p.size/2, p.size/2);
-      ctx.restore();
-    }
-    requestAnimationFrame(loop);
-  }
+  const bird = document.getElementById('morphEmoji');
+  const book = document.getElementById('bookEmoji');
 
-  window.addEventListener('resize', resize);
-  init();
+  // after 1.8s, morph
+  setTimeout(() => {
+    bird.classList.add('hide');
+    setTimeout(() => {
+      book.classList.add('show');
+      setTimeout(() => {
+        hide('scene-bird');
+        show('scene-book');
+      }, 900);
+    }, 600);
+  }, 1800);
+}
 </script>
 </body>
 </html>
